@@ -1,4 +1,4 @@
- export const secondsToMinutes = (duration) => {
+ export const convertSecondsToMinutes = (duration) => {
   // Hours, minutes and seconds
   var hrs = ~~(duration / 3600);
   var mins = ~~((duration % 3600) / 60);
