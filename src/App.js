@@ -9,6 +9,8 @@ function App() {
   const [videoTime, setVideoTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
+  const [comment, addComment] = useState(0);
+  const [volume, setVolume] = useState(0);
 
   const videoElement = useRef(null);
 
@@ -65,11 +67,22 @@ function App() {
     setVideoDuration(Math.round(videoDuration));
   };
 
-  // Comment submit
-  // function handleSubmit (event) {
-  //   alert('A name was submitted: ' + this.state.value);
-  //   event.preventDefault();
-  // };
+  const handleSubmit = (event) => {
+    alert("A comment was submitted");
+    console.log(event.target.value);
+    event.preventDefault();
+  };
+
+  const handleChange = (event) => {
+    addComment(event.target.value);
+  };
+
+  const volumeChangeHandler = (event) => {
+    const newVolume = event.target.value / 10;
+    setVolume(newVolume);
+    videoElement.current.volume = newVolume;
+    console.log(newVolume);
+  };
 
   return (
     <div>
@@ -90,9 +103,8 @@ function App() {
           </div>
         </div>
 
-
         <div className="row">
-          <div className="test col-xs col-xs-offset-2">
+          <div className="col-xs col-xs-offset-2">
             <div className="controls box-row">
               {isVideoPlaying ? (
                 <img
@@ -162,6 +174,34 @@ function App() {
               />
             </div>
           </div>
+        </div>
+        <div className="row">
+          <div className="col-xs col-xs-offset-2 ">
+            <div className="slidecontainer">
+              <input
+                type="range"
+                min="0"
+                max="10"
+                id="myRange"
+                onChange={volumeChangeHandler}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-xs col-xs-offset-3">
+          <form className="comment-form" onSubmit={handleSubmit}>
+            <label>
+              Comment:
+              <input
+                type="text"
+                value={comment.value}
+                onChange={handleChange}
+              />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
         </div>
       </div>
     </div>
