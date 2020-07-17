@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./flexboxgrid.css";
 import { convertSecondsToMinutes } from "./helpers/functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCoffee, faPlay, faPause } from "@fortawesome/free-solid-svg-icons";
+import TimeSlider from "./components/time-slider/time-slider";
+import FormComments from "./components/form-comments/form-comments";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -9,8 +13,8 @@ function App() {
   const [videoTime, setVideoTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
-  const [comment, addComment] = useState(0);
   const [volume, setVolume] = useState(0);
+  const [videoPosition, setVideoPosition] = useState(0);
 
   const videoElement = useRef(null);
 
@@ -67,21 +71,16 @@ function App() {
     setVideoDuration(Math.round(videoDuration));
   };
 
-  const handleSubmit = (event) => {
-    alert("A comment was submitted");
-    console.log(event.target.value);
-    event.preventDefault();
-  };
-
-  const handleChange = (event) => {
-    addComment(event.target.value);
-  };
-
   const volumeChangeHandler = (event) => {
     const newVolume = event.target.value / 10;
     setVolume(newVolume);
     videoElement.current.volume = newVolume;
-    console.log(newVolume);
+  };
+
+  const playbackChangeHandler = (event) => {
+    const newPosition = event.target.value;
+    setVideoPosition(newPosition);
+    videoElement.current.currentTime = newPosition;
   };
 
   return (
@@ -154,7 +153,6 @@ function App() {
               )}
             </div>
           </div>
-
           <div className="col-xs">
             <div className="box-row">
               <span className="video_time">
@@ -178,6 +176,7 @@ function App() {
         <div className="row">
           <div className="col-xs col-xs-offset-2 ">
             <div className="slidecontainer">
+              <p>Volume</p>
               <input
                 type="range"
                 min="0"
@@ -187,21 +186,29 @@ function App() {
               />
             </div>
           </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col-xs col-xs-offset-3">
-          <form className="comment-form" onSubmit={handleSubmit}>
-            <label>
-              Comment:
+          <div className="col-xs col-xs-offset-2 ">
+            {/* <div className="slidecontainer">
+              <p>Video Playback</p>
               <input
-                type="text"
-                value={comment.value}
-                onChange={handleChange}
+                type="range"
+                min="0"
+                max={Math.round(videoDuration)}
+                value={videoTime}
+                id="playbackRange"
+                onChange={playbackChangeHandler}
               />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
+            </div> */}
+            <TimeSlider
+              videoDuration={videoDuration}
+              videoTime={videoTime}
+              playbackChangeHandler={playbackChangeHandler}
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs col-xs-offset-2 ">
+            <FormComments />
+          </div>
         </div>
       </div>
     </div>
@@ -219,4 +226,7 @@ export default App;
    6.progress
    7. skaņa
    8.fullscreen on/off
+
+   9.!Change all icons from npm library. 
+      <FontAwesomeIcon icon={faCoffee} />
 */
